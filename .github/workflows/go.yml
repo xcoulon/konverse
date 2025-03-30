@@ -1,0 +1,65 @@
+name: ci-build
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        go-version: [1.23.x]
+        os: [ubuntu-latest] # skip macos-latest and windows-latest for now
+    name: Test with Go ${{ matrix.go-version }} on ${{ matrix.os }}
+
+    steps:
+    - name: Install Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ matrix.go-version }}
+
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles ('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
+    
+    - name: Install Task
+      uses: arduino/setup-task@v2
+      with:
+        version: 3.x
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Test
+      run: |
+        task test
+
+  golangci:
+    name: Lint with Go ${{ matrix.go-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: [1.23.x]
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Install Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ matrix.go-version }}
+        cache: false
+    - name: Lint
+      uses: golangci/golangci-lint-action@v7
+      with:
+        version: latest
+        args: -c .golangci.yml
+

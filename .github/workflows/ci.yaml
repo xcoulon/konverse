@@ -1,4 +1,4 @@
-name: test
+name: ci
 on:
   push:
     branches:
@@ -41,4 +41,21 @@ jobs:
     - name: Test
       run: |
         task test
+
+  lint:
+    name: Lint 
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Install Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: ${{ env.go-version }}
+        cache: false
+    - name: Lint
+      uses: golangci/golangci-lint-action@v7
+      with:
+        version: latest
+        args: -c .golangci.yml
   

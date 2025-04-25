@@ -23,11 +23,28 @@ func TestTools(t *testing.T) {
 			Namespace: "ns-1",
 			Name:      "pod-1a",
 		},
+		Spec: corev1.PodSpec{
+			Containers: []corev1.Container{
+				{
+					Name: "pod-1a-c1",
+				},
+			},
+		},
 	}
 	pod1b := &corev1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
 			Namespace: "ns-1",
 			Name:      "pod-1b",
+		},
+		Spec: corev1.PodSpec{
+			Containers: []corev1.Container{
+				{
+					Name: "pod-1b-c1",
+				},
+				{
+					Name: "pod-1b-c2",
+				},
+			},
 		},
 	}
 	pod2 := &corev1.Pod{
@@ -90,12 +107,12 @@ func TestTools(t *testing.T) {
 		expected := types.CallToolResult{
 			Content: []any{
 				types.TextContent{
-					Type: "text",
-					Text: "pod-1a",
+					Type: `text`,
+					Text: `{"name":"pod-1a","containers":["pod-1a-c1"]}`,
 				},
 				types.TextContent{
 					Type: "text",
-					Text: "pod-1b",
+					Text: `{"name":"pod-1b","containers":["pod-1b-c1","pod-1b-c2"]}`,
 				},
 			},
 		}

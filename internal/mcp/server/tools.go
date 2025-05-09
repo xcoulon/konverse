@@ -33,6 +33,11 @@ func listToolsHander(logger *log.Logger) jrpc2.Handler {
 						},
 						Required: []string{"namespace"},
 					},
+					Annotations: &types.ToolAnnotations{
+						Title:           types.ToStringPtr("List Pods"),
+						DestructiveHint: types.ToBoolPtr(false),
+						ReadOnlyHint:    types.ToBoolPtr(true),
+					},
 				},
 			},
 		}

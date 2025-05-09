@@ -17,7 +17,7 @@ task build
 
 2. Install the `go-jsonschema` generator from https://github.com/omissis/go-jsonschema then run:
    ```
-   go-jsonschema -p internal/types resources/schema.json > internal/types/types.go
+   go-jsonschema -p internal/types resources/schema.json > internal/mcp/types/types.go
    ```
 
 ## Testing the server with Goose CLI or UI

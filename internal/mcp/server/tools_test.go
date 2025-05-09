@@ -84,6 +84,11 @@ func TestTools(t *testing.T) {
 						},
 						Required: []string{"namespace"},
 					},
+					Annotations: &types.ToolAnnotations{
+						Title:           types.ToStringPtr("List Pods"),
+						DestructiveHint: types.ToBoolPtr(false),
+						ReadOnlyHint:    types.ToBoolPtr(true),
+					},
 				},
 			},
 		}
